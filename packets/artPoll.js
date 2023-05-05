@@ -1,3 +1,5 @@
+// 
+
 const CashedArtPollArray = [65, 114, 116, 45, 78, 101, 116, 0, 0, 32, 0, 14, 22, 16, 0, 0, 0, 0];
 var CashedArtPollBuffer = Buffer.from(CashedArtPollArray)
 

@@ -1,4 +1,4 @@
-const ArtDMX = require("../packets/artdmx");
+const ArtDMX = require("../packets/artDmx");
 const Discovery = require("./discovery");
 
 const sampleRate = 30;
@@ -12,6 +12,7 @@ function Setup(options) {
 var portAddressMap = { keys : [] };
 var subscriptions = { keys : [] };
 
+// 
 Discovery.SubscriptionListener.on("subscriptionChange", function(msg){
 
     subscriptions = msg.subscriptions;
@@ -23,7 +24,6 @@ Discovery.SubscriptionListener.on("subscriptionChange", function(msg){
                 maxChannel : 0,
                 changeFlag : false,
                 lastSend : pushTimeout,
-                fadeTracks : {}
             }
 
             portAddressMap.keys.push(portAddress);
@@ -40,17 +40,28 @@ Discovery.SubscriptionListener.on("subscriptionChange", function(msg){
 
 let portAddress;
 function SetChannel(network,universe,channelSegments) {
+
     portAddress = (network << 8) + universe;
+
     if (portAddressMap.keys.includes(portAddress)) {
         channelSegments.forEach(function(channelSegment) {   
-            portAddressMap[portAddress].channels[channelSegment[0] - 1] = channelSegment[2];
-            portAddressMap[portAddress].maxChannel = channelSegment[0];
+            portAddressMap[portAddress].channels[channelSegment[0] - 1] = channelSegment[1];
+
+            if (channelSegment[0] > portAddressMap[portAddress].maxChannel) {
+                portAddressMap[portAddress].maxChannel = channelSegment[0];
+            }
             portAddressMap[portAddress].changeFlag = true;    
         })
     }
+    // else {
+
+    //     channelSegments.forEach(function(channelSegment) {     
+    //         console.log("## (" + portAddress + ") Set " + channelSegment[0] + " to " + channelSegment[1])
+    //     })
+    // }
 }
 
-// Output Sampling
+// Channel Sampling Service (COS)
 // Samples the channel table once every 30ms and sends the output to the ArtDMX method
 let maxChannel;
 let channelData;
@@ -88,7 +99,6 @@ setInterval(function(){
             portAddress.lastSend += sampleRate;
         }
     })
-
 
 },sampleRate)
 

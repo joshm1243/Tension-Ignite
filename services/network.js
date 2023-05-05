@@ -2,7 +2,7 @@ const Datagram = require("dgram");
 const Events = require("events")
 const Backplane = new Events.EventEmitter()
 
-const ArtPollReply = require("./../packets/artpollreply")
+const ArtPollReply = require("../packets/artPollreply")
 
 var broadcastSocket = Datagram.createSocket({type: "udp4", reuseAddr: true});
 var unicastSocket = Datagram.createSocket({type : "udp4", reuseAddr: true})

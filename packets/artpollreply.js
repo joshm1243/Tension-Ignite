@@ -39,6 +39,7 @@ function Recieve(buffer) {
     let replyPacket = buffer.toJSON(buffer).data;
 
     
+    
     // Ensuring the reply is carrying the Art-Net header
     if (replyPacket[0] == 65 &&
         replyPacket[1] == 114 &&
